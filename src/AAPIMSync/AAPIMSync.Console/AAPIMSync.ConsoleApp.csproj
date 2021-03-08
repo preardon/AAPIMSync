@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>PReardon.AAPIMSync.Console</AssemblyName>
+    <RootNamespace>PReardon.AAPIMSync.ConsoleApp</RootNamespace>
+    <AssemblyVersion>0.0.1.0</AssemblyVersion>
+    <FileVersion>0.0.1.0</FileVersion>
+    <Version>0.0.1</Version>
+    <PackageId>PReardon.AAPIMSync.ConsoleApp</PackageId>
+    <Company>Reardon Tech</Company>
+    <Product>PReardon.AAPIMSync.Console</Product>
+    <Authors>Paul Reardon</Authors>
+    <PackageTags>alpha</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AAPIMSync\AAPIMSync.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="5.0.1" />
+  </ItemGroup>
+
+
+</Project>
