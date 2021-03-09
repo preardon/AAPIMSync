@@ -53,7 +53,7 @@ namespace PReardon.AAPIMSync
                 var folderPath = $"{folder}\\api-management\\products\\{product}";
                 Directory.CreateDirectory(folderPath);
 
-                var json = JsonSerializer.Serialize(p);
+                var json = JsonSerializer.Serialize(p, new JsonSerializerOptions { WriteIndented = true });
                 var filePath = $"{folderPath}\\{ApimUtils.ConfigurationFileName}";
                 System.Console.WriteLine($"Writing {filePath}");
                 await File.WriteAllTextAsync(filePath, json);

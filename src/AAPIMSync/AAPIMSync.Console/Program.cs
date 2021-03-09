@@ -12,28 +12,28 @@ namespace PReardon.AAPIMSync.ConsoleApp
             {
                 Console.WriteLine("Please Enter at least 2 Folders");
             }
-            var folderMaster = args[0];
+            var folderMain = args[0];
             var updateFolders = new List<string>();
             for(var i = 1; i< args.Length; i++)
             {
                 updateFolders.Add(args[i]);
             }
 
-            //folderMaster = @"";
+            //folderMain = @"";
             //updateFolders.Add(@"");
             //updateFolders.Add(@"");
 
-            Console.WriteLine($"Using {folderMaster} to Update {string.Join(',', updateFolders)}");
+            Console.WriteLine($"Using {folderMain} to Update {string.Join(',', updateFolders)}");
             Console.WriteLine("Press Y to Continue");
             var accept = Console.ReadKey();
 
             if (accept.Key == ConsoleKey.Y)
             {
-                var mainApi = await ApiSync.Get(folderMaster);
-                var mainProduct = await ProductSync.GetProducts(folderMaster);
-                var mainRelease = await ApiReleaseSync.GetApiReleases(folderMaster);
-                var mainVersion = await ApiVersionSetSync.Get(folderMaster);
-                var mainTag = await TagSync.GetTags(folderMaster);
+                var mainApi = await ApiSync.Get(folderMain);
+                var mainProduct = await ProductSync.GetProducts(folderMain);
+                var mainRelease = await ApiReleaseSync.GetApiReleases(folderMain);
+                var mainVersion = await ApiVersionSetSync.Get(folderMain);
+                var mainTag = await TagSync.GetTags(folderMain);
 
                 foreach (var f in updateFolders)
                 {
@@ -42,11 +42,14 @@ namespace PReardon.AAPIMSync.ConsoleApp
 
                     Console.WriteLine("Syncing Api");
                     var apiF1 = await ApiSync.Get(f);
-                    await ApiSync.CompareAndSync(f, apiF1, folderMaster, mainApi);
+                    await ApiSync.CompareAndSync(f, apiF1, folderMain, mainApi);
+
+                    Console.WriteLine("Syncing Policy");
+                    await PolicySync.CompareAndSyncAsync(f, folderMain);
 
                     Console.WriteLine("Syncing Products");
                     var productF1 = await ProductSync.GetProducts(f);
-                    //await ApimUtils.CheckRefsAsync(mainProduct.Values.First(), folderMaster);
+                    //await ApimUtils.CheckRefsAsync(mainProduct.Values.First(), folderMain);
                     await ProductSync.CompareAndSyncProducts(f, productF1, mainProduct);
 
                     Console.WriteLine("Syncing Api Releases");

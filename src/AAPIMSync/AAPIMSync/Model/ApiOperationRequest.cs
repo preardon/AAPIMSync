@@ -12,6 +12,9 @@ namespace PReardon.AAPIMSync.Model
         public List<Headers> Headers { get; set; }
         [JsonPropertyName("representations")]
         public List<Representation> Representations { get; set; }
+        
+        [JsonPropertyName("$ref-description")]
+        public string RefDescription { get; set; }
 
         public override bool Equals(Object obj)
         {

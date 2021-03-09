@@ -65,7 +65,7 @@ namespace PReardon.AAPIMSync
                 var folderPath = $"{folder}\\{_folderPart}\\{entity}";
                 Directory.CreateDirectory(folderPath);
 
-                var json = JsonSerializer.Serialize(t);
+                var json = JsonSerializer.Serialize(t, new JsonSerializerOptions { WriteIndented = true });
                 var filePath = $"{folderPath}\\{ApimUtils.ConfigurationFileName}";
                 System.Console.WriteLine($"Writing {filePath}");
                 await File.WriteAllTextAsync(filePath, json);
@@ -90,6 +90,12 @@ namespace PReardon.AAPIMSync
                     {
                         // Check Operation Policy
                         await CreateRef(o.RefPolicy, folder, authoritiveFolder);
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(o.Request.RefDescription))
+                    {
+                        // Check Operation Request Desicription
+                        await CreateRef(o.Request.RefDescription, folder, authoritiveFolder);
                     }
 
                     foreach (var r in o.Request.Representations)
@@ -190,7 +196,14 @@ namespace PReardon.AAPIMSync
                         await SyncRef(o.RefPolicy, folder, authoritiveFolder);
                     }
 
-                    foreach(var r in o.Request.Representations)
+                    if (!string.IsNullOrWhiteSpace(o.Request.RefDescription))
+                    {
+                        // Check Operation Request Desicription
+                        await SyncRef(o.Request.RefDescription, folder, authoritiveFolder);
+                    }
+
+
+                    foreach (var r in o.Request.Representations)
                     {
                         
                         if(!string.IsNullOrEmpty(r.RefSample))
@@ -224,7 +237,7 @@ namespace PReardon.AAPIMSync
                 //Check Api Scheamas
                 foreach(var s in e.ApiSchemas)
                 {
-                    if(!string.IsNullOrEmpty(s.RefDocumentValue))
+                    if(string.IsNullOrEmpty(s.RefDocumentValue))
                     {
                         //Check Api Schema Document Value
                         await SyncRef(s.RefDocumentValue, folder, authoritiveFolder);

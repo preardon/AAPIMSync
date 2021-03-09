@@ -60,7 +60,7 @@ namespace PReardon.AAPIMSync
                 var folderPath = $"{folder}\\{_folderPart}\\{entity}";
                 Directory.CreateDirectory(folderPath);
 
-                var json = JsonSerializer.Serialize(t);
+                var json = JsonSerializer.Serialize(t, new JsonSerializerOptions { WriteIndented = true });
                 var filePath = $"{folderPath}\\{ApimUtils.ConfigurationFileName}";
                 System.Console.WriteLine($"Writing {filePath}");
                 await File.WriteAllTextAsync(filePath, json);
