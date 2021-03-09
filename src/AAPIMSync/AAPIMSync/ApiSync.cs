@@ -69,6 +69,70 @@ namespace PReardon.AAPIMSync
                 var filePath = $"{folderPath}\\{ApimUtils.ConfigurationFileName}";
                 System.Console.WriteLine($"Writing {filePath}");
                 await File.WriteAllTextAsync(filePath, json);
+
+                //Check Refs
+                if (!string.IsNullOrWhiteSpace(t.RefDescription))
+                {
+                    //Check Description
+                    await CreateRef(t.RefDescription, folder, authoritiveFolder);
+                }
+
+                //Operations
+                foreach (var o in t.Operations)
+                {
+                    if (!string.IsNullOrWhiteSpace(o.RefDescription))
+                    {
+                        // Check Operation Description
+                        await CreateRef(o.RefDescription, folder, authoritiveFolder);
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(o.RefPolicy))
+                    {
+                        // Check Operation Policy
+                        await CreateRef(o.RefPolicy, folder, authoritiveFolder);
+                    }
+
+                    foreach (var r in o.Request.Representations)
+                    {
+
+                        if (!string.IsNullOrEmpty(r.RefSample))
+                        {
+                            // Check Operation Request Representation Samples
+                            await CreateRef(r.RefSample, folder, authoritiveFolder);
+                        }
+                    }
+
+                    foreach (var response in o.Responses)
+                    {
+                        if (!string.IsNullOrEmpty(response.RefDescription))
+                        {
+                            //Check Operation Response Description
+                            await CreateRef(response.RefDescription, folder, authoritiveFolder);
+
+                        }
+
+                        foreach (var r in response.Representations)
+                        {
+                            if (!string.IsNullOrEmpty(r.RefSample))
+                            {
+                                // Check Operation Response Representation Samples
+                                await CreateRef(r.RefSample, folder, authoritiveFolder);
+                            }
+                        }
+                    }
+
+                }
+
+                //Check Api Scheamas
+                foreach (var s in t.ApiSchemas)
+                {
+                    if (!string.IsNullOrEmpty(s.RefDocumentValue))
+                    {
+                        //Check Api Schema Document Value
+                        await CreateRef(s.RefDocumentValue, folder, authoritiveFolder);
+                    }
+                }
+
             }
             var oldEntities = entities.Keys.Except(authoritive.Keys);
             foreach (var release in oldEntities)
@@ -160,7 +224,7 @@ namespace PReardon.AAPIMSync
                 //Check Api Scheamas
                 foreach(var s in e.ApiSchemas)
                 {
-                    if(string.IsNullOrEmpty(s.RefDocumentValue))
+                    if(!string.IsNullOrEmpty(s.RefDocumentValue))
                     {
                         //Check Api Schema Document Value
                         await SyncRef(s.RefDocumentValue, folder, authoritiveFolder);
@@ -183,6 +247,24 @@ namespace PReardon.AAPIMSync
                 Console.WriteLine($"  - Updating {reference}");
                 await File.WriteAllTextAsync(updPath, auth);
             }
+        }
+
+        public async static Task CreateRef(string reference, string baseFolderToUpdate, string baseAuthoritiveFolder)
+        {
+            var authPath = Path.Combine(baseAuthoritiveFolder, reference);
+            var newPath = Path.Combine(baseFolderToUpdate, reference);
+
+            var auth = await File.ReadAllTextAsync(authPath);
+
+            var dir = Path.GetDirectoryName(newPath);
+            if(!Directory.Exists(dir))
+            {
+                Console.WriteLine($"-- Creating Directory {dir}");
+                Directory.CreateDirectory(dir);
+            }
+
+            Console.WriteLine($"  - Creating {reference}");
+            await File.WriteAllTextAsync(newPath, auth);
         }
     }
 }
