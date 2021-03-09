@@ -237,7 +237,7 @@ namespace PReardon.AAPIMSync
                 //Check Api Scheamas
                 foreach(var s in e.ApiSchemas)
                 {
-                    if(string.IsNullOrEmpty(s.RefDocumentValue))
+                    if(!string.IsNullOrEmpty(s.RefDocumentValue))
                     {
                         //Check Api Schema Document Value
                         await SyncRef(s.RefDocumentValue, folder, authoritiveFolder);
