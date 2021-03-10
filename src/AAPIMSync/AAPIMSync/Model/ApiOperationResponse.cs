@@ -8,14 +8,13 @@ namespace PReardon.AAPIMSync.Model
     {
         [JsonPropertyName("statusCode")]
         public int StatusCode { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("$ref-description")]
+        public string RefDescription { get; set; }
         [JsonPropertyName("representations")]
         public List<Representation> Representations { get; set; }
         [JsonPropertyName("headers")]
         public List<object> Headers { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("$ref-description")]
-        public string RefDescription { get; set; }
 
         public override bool Equals(Object obj)
         {
