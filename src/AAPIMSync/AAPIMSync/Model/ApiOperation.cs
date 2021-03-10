@@ -26,6 +26,7 @@ namespace PReardon.AAPIMSync.Model
         [JsonPropertyName("policies")]
         public object Policies { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("$ref-policy")]
         public string RefPolicy { get; set; }
 

@@ -12,7 +12,8 @@ namespace PReardon.AAPIMSync.Model
         public List<Headers> Headers { get; set; }
         [JsonPropertyName("representations")]
         public List<Representation> Representations { get; set; }
-        
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("$ref-description")]
         public string RefDescription { get; set; }
 
