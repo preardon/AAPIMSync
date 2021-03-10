@@ -18,7 +18,7 @@ namespace PReardon.AAPIMSync.Model
         [JsonPropertyName("typeName")]
         public string TypeName { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("$generatedSample")]
+        [JsonPropertyName("generatedSample")]
         public string GeneratedSample { get; set; }
 
         public override bool Equals(Object obj)
