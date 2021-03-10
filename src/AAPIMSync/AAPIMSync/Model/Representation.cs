@@ -8,10 +8,13 @@ namespace PReardon.AAPIMSync.Model
         [JsonPropertyName("contentType")]
         public string ContentType { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("$ref-sample")]
         public string RefSample { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("schemaId")]
         public string SchemaId { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("typeName")]
         public string TypeName { get; set; }
 
