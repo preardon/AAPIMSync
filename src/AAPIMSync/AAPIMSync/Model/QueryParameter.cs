@@ -12,8 +12,9 @@ namespace PReardon.AAPIMSync.Model
         public string Description { get; set; }
         [JsonPropertyName("type")]
         public string Type { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("required")]
-        public bool Required { get; set; }
+        public bool? Required { get; set; }
 
         //This is a guess for a Type
         [JsonPropertyName("values")]
