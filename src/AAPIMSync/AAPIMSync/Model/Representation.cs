@@ -17,6 +17,9 @@ namespace PReardon.AAPIMSync.Model
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("typeName")]
         public string TypeName { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("$generatedSample")]
+        public string GeneratedSample { get; set; }
 
         public override bool Equals(Object obj)
         {
@@ -30,7 +33,8 @@ namespace PReardon.AAPIMSync.Model
             return x.ContentType == y.ContentType &&
                 x.RefSample == y.RefSample &&
                 x.SchemaId == y.SchemaId &&
-                x.TypeName == y.TypeName;
+                x.TypeName == y.TypeName &&
+                x.GeneratedSample == y.GeneratedSample;
         }
         public static bool operator !=(Representation x, Representation y)
         {
@@ -39,7 +43,7 @@ namespace PReardon.AAPIMSync.Model
 
         public override int GetHashCode()
         {
-            return (ContentType, RefSample, SchemaId, TypeName).GetHashCode();
+            return (ContentType, RefSample, SchemaId, TypeName, GeneratedSample).GetHashCode();
         }
     }
 }
