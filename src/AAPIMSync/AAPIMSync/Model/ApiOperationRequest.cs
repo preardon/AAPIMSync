@@ -6,16 +6,15 @@ namespace PReardon.AAPIMSync.Model
 {
     public class ApiOperationRequest
     {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("$ref-description")]
+        public string RefDescription { get; set; }
         [JsonPropertyName("queryParameters")]
         public List<QueryParameter> QueryParameters { get; set; }
         [JsonPropertyName("headers")]
         public List<Headers> Headers { get; set; }
         [JsonPropertyName("representations")]
         public List<Representation> Representations { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("$ref-description")]
-        public string RefDescription { get; set; }
 
         public override bool Equals(Object obj)
         {
