@@ -53,7 +53,7 @@ namespace PReardon.AAPIMSync
                 var folderPath = $"{folder}\\api-management\\products\\{product}";
                 Directory.CreateDirectory(folderPath);
 
-                var json = JsonSerializer.Serialize(p, new JsonSerializerOptions { WriteIndented = true });
+                var json = JsonSerialisation.Serialise(p);
                 var filePath = $"{folderPath}\\{ApimUtils.ConfigurationFileName}";
                 System.Console.WriteLine($"Writing {filePath}");
                 await File.WriteAllTextAsync(filePath, json);
@@ -91,7 +91,7 @@ namespace PReardon.AAPIMSync
                     var updatedPropduct = ProductSync.Sync(product.Value, authoritiveProducts[product.Key], false);
 
                     //Now Save
-                    var json = JsonSerializer.Serialize(updatedPropduct, new JsonSerializerOptions { WriteIndented = true });
+                    var json = JsonSerialisation.Serialise(updatedPropduct);
                     var filePath = $"{folder}\\api-management\\products\\{product.Key}\\{ApimUtils.ConfigurationFileName}"; //Path.Combine(folder1, @"\api-management\products", product.Key, "configuration.json");
                     await File.WriteAllTextAsync(filePath, json);
                 }
@@ -118,7 +118,7 @@ namespace PReardon.AAPIMSync
             {
                 var json = await File.ReadAllTextAsync($"{dir}\\{ApimUtils.ConfigurationFileName}");
                 var tagName = new DirectoryInfo(dir).Name;
-                var config = JsonSerializer.Deserialize<Product>(json);
+                var config = JsonSerializer.Deserialize<Product>(json, JsonSerialisation.Options);
 
                 //Pop Deps
                 if (!string.IsNullOrEmpty(config.RefDescription))

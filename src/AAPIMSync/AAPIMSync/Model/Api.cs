@@ -29,16 +29,20 @@ namespace PReardon.AAPIMSync.Model
         public SubscriptionKeyParameterNames SubscriptionKeyParameterNames { get; set; }
         [JsonPropertyName("isCurrent")]
         public bool IsCurrent { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("apiRevisionDescription")]
         public string ApiRevisionDescription { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("apiVersion")]
         public string ApiVersion { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("apiVersionSetId")]
         public string ApiVersionSetId { get; set; }
         [JsonPropertyName("operations")]
         public List<ApiOperation> Operations { get; set; }
         [JsonPropertyName("apiSchemas")]
         public List<ApiSchema> ApiSchemas { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("$ref-policy")]
         public string RefPolicy { get; set; }
 

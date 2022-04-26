@@ -42,7 +42,7 @@ namespace PReardon.AAPIMSync
             {
                 var json = await File.ReadAllTextAsync($"{dir}\\{ApimUtils.ConfigurationFileName}");
                 var tagName = new DirectoryInfo(dir).Name;
-                var release = JsonSerializer.Deserialize<ApiVersionSet>(json);
+                var release = JsonSerializer.Deserialize<ApiVersionSet>(json, JsonSerialisation.Options);
 
                 releases.Add(tagName, release);
             }
@@ -60,7 +60,7 @@ namespace PReardon.AAPIMSync
                 var folderPath = $"{folder}\\{_folderPart}\\{entity}";
                 Directory.CreateDirectory(folderPath);
 
-                var json = JsonSerializer.Serialize(t, new JsonSerializerOptions { WriteIndented = true });
+                var json = JsonSerialisation.Serialise(t);
                 var filePath = $"{folderPath}\\{ApimUtils.ConfigurationFileName}";
                 System.Console.WriteLine($"Writing {filePath}");
                 await File.WriteAllTextAsync(filePath, json);
@@ -72,7 +72,7 @@ namespace PReardon.AAPIMSync
                 var folderPath = Path.Combine($"{folder}\\{_folderPart}\\", entity);
                 File.Delete(Path.Combine(folderPath, ApimUtils.ConfigurationFileName));
 
-                Directory.Delete(folderPath);
+                Directory.Delete(folderPath, true);
 
                 entities.Remove(entity);
             }
@@ -85,7 +85,7 @@ namespace PReardon.AAPIMSync
                     var updatedTag = Sync(entity.Value, authoritive[entity.Key]);
 
                     //Now Save
-                    var json = JsonSerializer.Serialize(updatedTag, new JsonSerializerOptions { WriteIndented = true });
+                    var json = JsonSerialisation.Serialise(updatedTag);
                     var filePath = $"{folder}\\{_folderPart}\\{entity.Key}\\{ApimUtils.ConfigurationFileName}"; //Path.Combine(folder1, @"\api-management\products", product.Key, ApimUtils.ConfigurationFileName);
                     await File.WriteAllTextAsync(filePath, json);
                 }

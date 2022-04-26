@@ -9,6 +9,7 @@ namespace PReardon.AAPIMSync.Model
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("$ref-description")]
         public string RefDescription { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("queryParameters")]
         public List<QueryParameter> QueryParameters { get; set; }
         [JsonPropertyName("headers")]

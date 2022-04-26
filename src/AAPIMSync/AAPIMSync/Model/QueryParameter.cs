@@ -8,6 +8,7 @@ namespace PReardon.AAPIMSync.Model
     {
         [JsonPropertyName("name")]
         public string Name { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("description")]
         public string Description { get; set; }
         [JsonPropertyName("type")]
@@ -16,9 +17,22 @@ namespace PReardon.AAPIMSync.Model
         [JsonPropertyName("required")]
         public bool? Required { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("schemaId")]
+        public string SchemaId { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("typeName")]
+        public string TypeName { get; set; }
+
         //This is a guess for a Type
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("values")]
         public List<string> Values { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("defaultValue")]
+        public string DefaultValue { get; set; }
 
         public override bool Equals(Object obj)
         {
@@ -33,6 +47,9 @@ namespace PReardon.AAPIMSync.Model
                 x.Description == y.Description &&
                 x.Type == y.Type &&
                 x.Required == y.Required &&
+                x.SchemaId == y.SchemaId &&
+                x.TypeName == y.TypeName &&
+                x.DefaultValue == y.DefaultValue &&
                 ApimUtils.ListsAreEqual(x.Values, y.Values);
         }
         public static bool operator !=(QueryParameter x, QueryParameter y)
@@ -42,7 +59,7 @@ namespace PReardon.AAPIMSync.Model
 
         public override int GetHashCode()
         {
-            return (Name, Description, Type, Required, Values).GetHashCode();
+            return (Name, Description, Type, Required, Values, SchemaId, TypeName, DefaultValue).GetHashCode();
         }
     }
 }

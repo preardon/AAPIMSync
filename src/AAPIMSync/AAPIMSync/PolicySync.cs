@@ -47,17 +47,19 @@ namespace PReardon.AAPIMSync
             var oldEntities = updatePolicies.Except(authoritivePolicies);
             foreach (var entity in oldEntities)
             {
-                //Remove Products
+                //Remove Policies
                 var path = Path.Combine(updatePath, entity);
                 Console.WriteLine($"  - Deleting {entity}");
+                File.Delete(path);
                 updatePolicies.Remove(path);
             }
-            foreach (var entity in updatePolicies)
+
+            foreach (var entity in authoritivePolicies)
             {
                 var authPath = Path.Combine(authoritivePath, entity);
                 var newPath = Path.Combine(updatePath, entity);
                 var auth = await File.ReadAllTextAsync(authPath);
-                var upd = await File.ReadAllTextAsync(newPath);
+                var upd = File.Exists(newPath) ? await File.ReadAllTextAsync(newPath) : "";
 
                 if (!auth.Equals(upd))
                 {

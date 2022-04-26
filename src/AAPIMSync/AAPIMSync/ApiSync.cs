@@ -47,7 +47,7 @@ namespace PReardon.AAPIMSync
             {
                 var json = await File.ReadAllTextAsync($"{dir}\\{ApimUtils.ConfigurationFileName}");
                 var tagName = new DirectoryInfo(dir).Name;
-                var release = JsonSerializer.Deserialize<Api>(json);
+                var release = JsonSerializer.Deserialize<Api>(json, JsonSerialisation.Options);
 
                 releases.Add(tagName, release);
             }
@@ -65,7 +65,7 @@ namespace PReardon.AAPIMSync
                 var folderPath = $"{folder}\\{_folderPart}\\{entity}";
                 Directory.CreateDirectory(folderPath);
 
-                var json = JsonSerializer.Serialize(t, new JsonSerializerOptions { WriteIndented = true });
+                var json = JsonSerialisation.Serialise(t);
                 var filePath = $"{folderPath}\\{ApimUtils.ConfigurationFileName}";
                 System.Console.WriteLine($"Writing {filePath}");
                 await File.WriteAllTextAsync(filePath, json);
@@ -147,7 +147,7 @@ namespace PReardon.AAPIMSync
                 var folderPath = Path.Combine($"{folder}\\{_folderPart}\\", release);
                 File.Delete(Path.Combine(folderPath, ApimUtils.ConfigurationFileName));
 
-                Directory.Delete(folderPath);
+                Directory.Delete(folderPath, true);
 
                 entities.Remove(release);
             }
@@ -164,7 +164,7 @@ namespace PReardon.AAPIMSync
                     var updatedApi = Sync(e, a);
 
                     //Now Save
-                    var json = JsonSerializer.Serialize(updatedApi, new JsonSerializerOptions { WriteIndented = true });
+                    var json = JsonSerialisation.Serialise(updatedApi);
                     var filePath = $"{folder}\\{_folderPart}\\{entity.Key}\\{ApimUtils.ConfigurationFileName}"; //Path.Combine(folder1, @"\api-management\products", product.Key, ApimUtils.ConfigurationFileName);
                     await File.WriteAllTextAsync(filePath, json);
                     e = updatedApi;
@@ -253,7 +253,7 @@ namespace PReardon.AAPIMSync
 
             //Should I really case about Updating??
             var auth = await File.ReadAllTextAsync(authPath);
-            var upd = await File.ReadAllTextAsync(updPath);
+            var upd = File.Exists(updPath) ? await File.ReadAllTextAsync(updPath) : "";
 
             if(!auth.Equals(upd))
             {

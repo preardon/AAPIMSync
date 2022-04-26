@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace PReardon.AAPIMSync.Model
@@ -20,6 +21,13 @@ namespace PReardon.AAPIMSync.Model
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("generatedSample")]
         public string GeneratedSample { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("sample")]
+        public string Sample { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("examples")]
+        public Dictionary<string, Reference> Examples { get; set; }
 
         public override bool Equals(Object obj)
         {
@@ -34,7 +42,9 @@ namespace PReardon.AAPIMSync.Model
                 x.RefSample == y.RefSample &&
                 x.SchemaId == y.SchemaId &&
                 x.TypeName == y.TypeName &&
-                x.GeneratedSample == y.GeneratedSample;
+                x.GeneratedSample == y.GeneratedSample &&
+                x.Sample == y.Sample &&
+                x.Examples == y.Examples;
         }
         public static bool operator !=(Representation x, Representation y)
         {
@@ -43,7 +53,7 @@ namespace PReardon.AAPIMSync.Model
 
         public override int GetHashCode()
         {
-            return (ContentType, RefSample, SchemaId, TypeName, GeneratedSample).GetHashCode();
+            return (ContentType, RefSample, SchemaId, TypeName, GeneratedSample, Sample, Examples).GetHashCode();
         }
     }
 }

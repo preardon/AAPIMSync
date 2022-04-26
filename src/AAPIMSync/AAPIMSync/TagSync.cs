@@ -42,7 +42,7 @@ namespace PReardon.AAPIMSync
             {
                 var json = await File.ReadAllTextAsync($"{dir}\\{ApimUtils.ConfigurationFileName}");
                 var tagName = new DirectoryInfo(dir).Name;
-                var tag = JsonSerializer.Deserialize<Tag>(json);
+                var tag = JsonSerializer.Deserialize<Tag>(json, JsonSerialisation.Options);
 
                 tags.Add(tagName, tag);
             }
@@ -60,7 +60,7 @@ namespace PReardon.AAPIMSync
                 var folderPath = $"{folder}\\{_tagsFolder}\\{tag}";
                 Directory.CreateDirectory(folderPath);
 
-                var json = JsonSerializer.Serialize(t, new JsonSerializerOptions { WriteIndented = true });
+                var json = JsonSerialisation.Serialise(t);
                 var filePath = $"{folderPath}\\{ApimUtils.ConfigurationFileName}";
                 System.Console.WriteLine($"Writing {filePath}");
                 await File.WriteAllTextAsync(filePath, json);
@@ -73,7 +73,7 @@ namespace PReardon.AAPIMSync
                 var folderPath = Path.Combine($"{folder}\\{_tagsFolder}\\", tag);
                 File.Delete(Path.Combine(folderPath, ApimUtils.ConfigurationFileName));
 
-                Directory.Delete(folderPath);
+                Directory.Delete(folderPath, true);
 
                 tags.Remove(tag);
             }
@@ -86,7 +86,7 @@ namespace PReardon.AAPIMSync
                     var updatedTag = Sync(tag.Value, authoritiveTags[tag.Key]);
 
                     //Now Save
-                    var json = JsonSerializer.Serialize(updatedTag, new JsonSerializerOptions { WriteIndented = true });
+                    var json = JsonSerialisation.Serialise(updatedTag);
                     var filePath = $"{folder}\\{_tagsFolder}\\{tag.Key}\\{ApimUtils.ConfigurationFileName}"; //Path.Combine(folder1, @"\api-management\products", product.Key, ApimUtils.ConfigurationFileName);
                     await File.WriteAllTextAsync(filePath, json);
                 }

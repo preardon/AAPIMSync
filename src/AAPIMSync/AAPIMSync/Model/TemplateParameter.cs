@@ -9,6 +9,7 @@ namespace PReardon.AAPIMSync.Model
         public string Name { get; set; }
         [JsonPropertyName("title")]
         public string Title { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("description")]
         public string Description { get; set; }
 
